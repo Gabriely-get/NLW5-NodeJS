@@ -1,9 +1,9 @@
 import { Repository, EntityRepository } from "typeorm";
 import { Setting } from "../entities/Setting";
 
-@EntityRepository()
+@EntityRepository('settings')
 class SettingsRepository extends Repository<Setting> {
-
+	// console.log('respository');
 }
 
 export { SettingsRepository };
