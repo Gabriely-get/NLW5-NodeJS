@@ -11,6 +11,8 @@ class UsersService {
 	}
 
 	async create(email: string) {
+		const usersRepository = getCustomRepository(UsersRepository);
+		
 		const user = usersRepository.create({ email });
 
 		await usersRepository.save(user);

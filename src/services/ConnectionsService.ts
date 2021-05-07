@@ -30,4 +30,4 @@ class ConnectionsService {
 	}
 }
 
-export { ConnectionService };
+export { ConnectionsService };
