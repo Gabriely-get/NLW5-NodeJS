@@ -8,7 +8,7 @@ interface ISettingsCreate {
 }
 
 class SettingsService {
-	private settingsRepository = Repository<Setting>;
+	private settingsRepository: Repository<Setting>;
 
 	constructor() {
 
