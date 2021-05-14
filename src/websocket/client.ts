@@ -53,6 +53,10 @@ io.on("connect", (socket) => {
 			user_id
 		});
 
+		const allMessages = await messagesService.listByUser(user_id);
+
+		socket.emit("client_list_all_messages", allMessages);
+
 		// Salvar a conexao do usuario com o socket_id &
 		// Salvar a mesma conexao desse mesmo user com socket_id diferente
 	});
