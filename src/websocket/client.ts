@@ -8,7 +8,7 @@ io.on("connect", (socket) => {
 	const usersService = new UsersService();
 
 	socket.on("client_first_access", async (params) => {
-		const socket_id = socket.id;
+		const socketId = socket.id;
 		const { text, email } = params;
 
 		const userExists = await usersService.findByEmail(email);
@@ -17,19 +17,18 @@ io.on("connect", (socket) => {
 			const user = await usersService.create(email);
 
 			let con = await connectionsService.create({
-				socket_id,
+				socket_id: socketId,
 				user_id: user.id
 			});
-		console.log(con);
-		}
-		else {
-			let con = await connectionsService.create({
-				socket_id,
-				user_id: userExists.id
-			});
-		console.log(con);
+		} else {
+				let con = await connectionsService.create({
+					socket_id: socketId,
+					user_id: userExists.id
+				});
+			} 
 		}
 
-		// Salvar a conexao com o socket_id
+		// Salvar a conexao do usuario com o socket_id &
+		// Salvar a mesma conexao desse mesmo user com socket_id diferente
 	});
 });
