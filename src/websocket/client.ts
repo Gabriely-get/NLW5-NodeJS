@@ -21,11 +21,20 @@ io.on("connect", (socket) => {
 				user_id: user.id
 			});
 		} else {
+			const connection = await connectionsService.findUserById(userExists.id);
+
+			if(!connection) {
+
 				let con = await connectionsService.create({
 					socket_id: socketId,
 					user_id: userExists.id
 				});
-			} 
+
+			} else {
+				connection.socket_id = socketId;
+
+				await connectionsService.create(connection);
+			}
 		}
 
 		// Salvar a conexao do usuario com o socket_id &
