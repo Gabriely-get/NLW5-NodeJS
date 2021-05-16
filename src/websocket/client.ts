@@ -54,10 +54,14 @@ io.on("connect", (socket) => {
 		});
 
 		const allMessages = await messagesService.listByUser(user_id);
+		const allConnectionsWithoutAdmin = await connectionsService.findAllWithoutAdmin();
 
 		socket.emit("client_list_all_messages", allMessages);
 
+		//atualiza automaticamente a lista de usuario sem atendimento na pagina do admin
+		io.emit("admin_list_all_users", allConnectionsWithoutAdmin);
+
 		// Salvar a conexao do usuario com o socket_id &
-		// Salvar a mesma conexao desse mesmo user com socket_id diferente
+		// Salvar uma conexao existente com socket_id diferente
 	});
 });
