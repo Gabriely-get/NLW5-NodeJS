@@ -66,10 +66,10 @@ function call(id) {
 }
 
 function sendMessage(id) {
-	const text = document.getElementById(`send_message_${id}`).value;
+	const text = document.getElementById(`send_message_${id}`);
 
 	const params = {
-		text: text,
+		text: text.value,
 		user_id: id
 	};
 
@@ -85,5 +85,5 @@ function sendMessage(id) {
 	
 	divMessages.appendChild(createDiv);
 
-	text = '';
+	tex.value = "";
 }
