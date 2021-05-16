@@ -1,4 +1,4 @@
-import { getCustomRepository, Repository } from "typeorm";
+import { getCustomRepository, Repository, createQueryBuilder } from "typeorm";
 import { Connection } from '../entities/Connection';
 import { ConnectionsRepository } from '../repositories/ConnectionsRepository';
 
@@ -9,7 +9,7 @@ interface IConnectionCreate {
 }
 
 class ConnectionsService {
-	private connectionsRepository: Repository<Connection>
+	private connectionsRepository: Repository<Connection>;
 
 	constructor() {
 		this.connectionsRepository = getCustomRepository(ConnectionsRepository);
@@ -25,6 +25,19 @@ class ConnectionsService {
 		await this.connectionsRepository.save(connection);
 
 		return connection;
+	}
+
+	async update({ socket_id, user_id}: IConnectionCreate) {
+		const updatedConn = await this.connectionsRepository
+					.createQueryBuilder()
+					.update(Connection)
+					.set({ socket_id })
+					.where("user_id = :user_id", {
+						user_id,
+					})
+					.execute();
+
+		return updatedConn;
 	}
 
 	async findUserById(user_id: string) {

@@ -36,7 +36,7 @@ io.on("connect", (socket) => {
 
 			if(!connection) {
 
-				let con = await connectionsService.create({
+				await connectionsService.create({
 					socket_id: socketId,
 					user_id: userExists.id
 				});
@@ -44,7 +44,7 @@ io.on("connect", (socket) => {
 			} else {
 				connection.socket_id = socketId;
 
-				await connectionsService.create(connection);
+				await connectionsService.update(connection);
 			}
 		}
 
