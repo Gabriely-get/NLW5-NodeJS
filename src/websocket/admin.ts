@@ -19,4 +19,22 @@ io.on("connect", async (socket) => {
 
 		callback(allMessages);
 	});
+
+	socket.on("admin_send_message", async (params) => {
+		const { text, user_id} = params;
+
+		await messagesService.create({
+			text,
+			user_id,
+			admin_id: socket.id
+		});
+
+		const { socket_id } = await connectionsService.findUserById(user_id);
+
+		// mando mensagem para o socket especifico do usuario emitindo um evento
+		io.to(socket_id).emit("admin_send_to_client", {
+			text,
+			socket_id: socket.id
+		});
+	});
 });

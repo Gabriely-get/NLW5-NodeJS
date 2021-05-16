@@ -43,7 +43,7 @@ function call(id) {
 
 		messages.forEach((message) => {
 		const createDiv = document.createElement("div");
-		
+
 			if(message.admin_id === null) {
 				createDiv.className = "admin_message_client";
 
@@ -63,4 +63,27 @@ function call(id) {
 		});
 		console.log(divMessages);
 	});
+}
+
+function sendMessage(id) {
+	const text = document.getElementById(`send_message_${id}`).value;
+
+	const params = {
+		text: text,
+		user_id: id
+	};
+
+	socket.emit("admin_send_message", params);
+
+	const divMessages = document.getElementById(`allMessages${id}`);
+	const createDiv = document.createElement("div");
+
+	createDiv.className = "admin_message_admin";
+
+	createDiv.innerHTML += `Atendente: <span>${params.text}</span>`;
+	createDiv.innerHTML += `<span class="admin_date">${dayjs().format("DD/MM/YY HH:mm:ss")}</span>`;
+	
+	divMessages.appendChild(createDiv);
+
+	text = '';
 }
