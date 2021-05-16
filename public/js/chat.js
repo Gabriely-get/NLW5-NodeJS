@@ -35,6 +35,7 @@ document.querySelector('#start_chat').addEventListener("click", (event) => {
     var template_admin = document.getElementById("admin-template").innerHTML;
 
     messages.forEach((message) => {
+
       if(message.admin_id === null) {
         const rendered = Mustache.render(template_client, {
           message: message.text,
@@ -49,6 +50,6 @@ document.querySelector('#start_chat').addEventListener("click", (event) => {
 
           document.getElementById("messages_admin").innerHTML += rendered;
       }
-    })
+    });
   });
 });
