@@ -64,4 +64,20 @@ io.on("connect", (socket) => {
 		// Salvar a conexao do usuario com o socket_id &
 		// Salvar uma conexao existente com socket_id diferente
 	});
+
+	socket.on("client_send_to_admin", async (params) => {
+		const { text, socket_admin_id } = params;
+		const socket_id = socket.id;
+		const { user_id } = await connectionsService.findBySocketId(socket_id);
+
+		const message = await messagesService.create({
+			text,
+			user_id,
+		});
+
+		io.to(socket_admin_id).emit("admin_receive_message", {
+			message,
+			socket_id
+		});
+	});
 });
