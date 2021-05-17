@@ -27,11 +27,24 @@ class ConnectionsService {
 		return connection;
 	}
 
-	async update({ socket_id, user_id}: IConnectionCreate) {
+	async updateSocketId({ socket_id, user_id}: IConnectionCreate) {
 		const updatedConn = await this.connectionsRepository
 					.createQueryBuilder()
 					.update(Connection)
 					.set({ socket_id })
+					.where("user_id = :user_id", {
+						user_id,
+					})
+					.execute();
+
+		return updatedConn;
+	}
+
+	async updateAdminId({ admin_id, user_id}: IConnectionCreate) {
+		const updatedConn = await this.connectionsRepository
+					.createQueryBuilder()
+					.update(Connection)
+					.set({ admin_id })
 					.where("user_id = :user_id", {
 						user_id,
 					})
