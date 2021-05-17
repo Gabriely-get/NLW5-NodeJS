@@ -54,6 +54,12 @@ class ConnectionsService {
 
 		return connections;
 	}
+
+	async findBySocketId(socket_id: string) {
+		const conn = await this.connectionsRepository.findOne({ socket_id });
+
+		return conn;
+	}
 }
 
 export { ConnectionsService };
