@@ -89,3 +89,17 @@ console.log(params, socket.id);
   document.getElementById("messages").innerHTML += rendered;
   text.value = "";
 });
+
+function closeChat() {
+  const chat_help = document.getElementById("chat_help");
+
+  const chat_supp = document.getElementById("chat_in_support");
+
+  if(chat_help.style.display == "block") {
+
+    chat_help.style.display = "none";
+  } else if(chat_supp.style.display == "block") {
+
+    chat_supp.style.display = "none";
+  }
+}
