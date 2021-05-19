@@ -42,9 +42,11 @@ io.on("connect", (socket) => {
 				});
 
 			} else {
+				connection.admin_id = null;
 				connection.socket_id = socketId;
 
-				await connectionsService.update(connection);
+				let a = await connectionsService.create(connection);
+				console.log(a);
 			}
 		}
 

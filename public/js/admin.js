@@ -2,6 +2,7 @@ const socket = io();
 let connectionsUsers = [];
 
 socket.on("admin_list_all_users", (connections) => {
+	console.log(connections);
 	connectionsUsers = connections;
 	document.getElementById("list_users").innerHTML = "";
 
@@ -34,6 +35,8 @@ function call(id) {
 	const params = {
 		user_id: connection.user_id
 	};
+
+	socket.emit("admin_user_in_support", params);
 
 	//carrega as mensagens do chat
 	socket.emit("admin_list_messages_by_users", params, messages => {
@@ -87,9 +90,9 @@ function sendMessage(id) {
 	text.value = "";
 }
 
-socket.on("admin_receive_message", async (data) => {
-	const connection = await connectionsUsers.find(connection => connection.socket_id === data.socket_id);
-
+socket.on("admin_receive_message", async data => {
+	const connection = await connectionsUsers.find(connection => connection.socket_id == data.socket_id);
+	console.log(connection, data.socket_id);
 	const divMessages = document.getElementById(`allMessages${connection.user_id}`);
 	const createDiv = document.createElement("div");
 
