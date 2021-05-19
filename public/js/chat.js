@@ -103,3 +103,14 @@ function closeChat() {
     chat_supp.style.display = "none";
   }
 }
+
+document.getElementById("btn_support").addEventListener("click", (event) => {
+  const chat_is_open = document.getElementById("chat_help");
+  const chat_supp = document.getElementById("chat_in_support");
+
+  if(chat_is_open.style.display == "block") {
+    null;
+  } else if(chat_supp.style.display == "block") {
+    null;
+  }
+});

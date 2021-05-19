@@ -111,12 +111,27 @@
     }
 
     function openChat() {
-      chat.style.display = "block";
+      const chat_supp = document.getElementById("chat_in_support");
+
+      if(chat.style.display == "block" || chat_supp.style.display == "block") {
+        null;
+      } else {
+        chat.style.display = "block";
+      } 
     }
 
-    function closeChat() {
-      chat.style.display = "none";
-    }
+    
+function closeChat() {
+  const chat_supp = document.getElementById("chat_in_support");
+
+  if(chat.style.display == "block") {
+
+    chat.style.display = "none";
+  } else if(chat_supp.style.display == "block") {
+
+    chat_supp.style.display = "none";
+  }
+}
 
     function keyUpTextHelp(event) {
       const charac_remaining = document.getElementById("charac_remaining");
