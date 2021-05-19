@@ -37,6 +37,8 @@ document.querySelector('#start_chat').addEventListener("click", (event) => {
 
     var template_client = document.getElementById("message-user-template").innerHTML;
     var template_admin = document.getElementById("admin-template").innerHTML;
+    
+    document.getElementById("messages").innerHTML = "";
 
     messages.forEach((message) => {
 
@@ -103,14 +105,3 @@ function closeChat() {
     chat_supp.style.display = "none";
   }
 }
-
-document.getElementById("btn_support").addEventListener("click", (event) => {
-  const chat_is_open = document.getElementById("chat_help");
-  const chat_supp = document.getElementById("chat_in_support");
-
-  if(chat_is_open.style.display == "block") {
-    null;
-  } else if(chat_supp.style.display == "block") {
-    null;
-  }
-});
