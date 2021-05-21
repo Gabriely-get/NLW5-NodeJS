@@ -27,15 +27,14 @@ class ConnectionsService {
 		return connection;
 	}
 
-	async updateSocketId({ socket_id, user_id}: IConnectionCreate) {
-		await this.connectionsRepository
+	async updateSocketId(socket_id: string, userid: string) {
+		let an = await this.connectionsRepository
 				.createQueryBuilder()
 				.update(Connection)
 				.set({ socket_id })
-				.where("user_id = :user_id", {
-					user_id,
-				})
+				.where({ user_id: userid })
 				.execute();
+				return an;
 	}
 
 	async updateAdminId({ user_id, socket_id }: IConnectionCreate) {
@@ -49,7 +48,8 @@ class ConnectionsService {
 
 	async findUserById(user_id: string) {
 		const connection = await this.connectionsRepository.findOne({user_id});
-		
+		let a = await this.connectionsRepository.find();
+		console.log(a);
 		return connection;
 	}
 
@@ -60,6 +60,18 @@ class ConnectionsService {
 		});
 
 		return connections;
+	}
+
+	async findUserWithoutAdmin(userId: string) {
+		const isNull = await this.connectionsRepository.findOne({
+			where: {
+				admin_id: null,
+				user_id: userId
+			},
+			relations: ["user"],
+		});
+
+		return isNull;
 	}
 
 	async findBySocketId(socket_id: string) {
