@@ -36,17 +36,31 @@ io.on("connect", (socket) => {
 
 			if(!connection) {
 
-				await connectionsService.create({
+				let a =await connectionsService.create({
 					socket_id: socketId,
 					user_id: userExists.id
 				});
-
+				console.log('criei conn ', a);
 			} else {
-				connection.admin_id = null;
-				connection.socket_id = socketId;
+				//se o usuario ja se conectou e foi atendido em todas,
+				//uma nova conexao é criada, mas se houver uma conexao dele nao atendida
+				//o socket dele deve ser atualizado para nao ser duplicado na lista dos admins
 
-				let a = await connectionsService.create(connection);
-				console.log(a);
+				const userAdminIsNull = await connectionsService.findUserWithoutAdmin(user_id);
+				connection.socket_id = socket.id;
+				console.log('admin is null? ', userAdminIsNull);
+				
+				if(!userAdminIsNull) {
+
+					connection.admin_id = null;
+					let a = await connectionsService.create(connection);
+					console.log('ja foi atendido antes: criei: ', a);
+				} else {
+
+					let userid = connection.user_id;
+					let a = await connectionsService.updateSocketId(socketId, userid);
+					console.log('updSoc', a);
+				}
 			}
 		}
 
@@ -76,6 +90,8 @@ io.on("connect", (socket) => {
 			text,
 			user_id,
 		});
+
+		console.log('user-send-to: ', text, user_id, socket_id, socket_admin_id, message);
 
 		io.to(socket_admin_id).emit("admin_receive_message", {
 			message,

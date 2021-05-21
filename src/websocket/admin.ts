@@ -21,16 +21,18 @@ io.on("connect", async (socket) => {
 	});
 
 	socket.on("admin_send_message", async (params) => {
-		const { text, user_id} = params;
+		const { text, user_id, socket_id } = params;
 
-		await messagesService.create({
+		let m = await messagesService.create({
 			text,
 			user_id,
 			admin_id: socket.id
 		});
 
-		const { socket_id } = await connectionsService.findUserById(user_id);
-
+		// const { socket_id } = await connectionsService.findUserById(user_id);
+		console.log('socketUsernapagAd: ', socket_id);
+		console.log('socketAdmin: ', socket.id);
+		console.log('mensAd pag Ad: ', m);
 		// mando mensagem para o socket especifico do usuario emitindo um evento
 		io.to(socket_id).emit("admin_send_to_client", {
 			text,
@@ -41,7 +43,7 @@ io.on("connect", async (socket) => {
 	socket.on("admin_user_in_support", async params => {
 		const { user_id } = params;
 		const socket_id = socket.id;
-		
+
 		await connectionsService.updateAdminId({user_id, socket_id});
 		io.emit("admin_list_all_users", allConnectionsWithoutAdmin);
 	});

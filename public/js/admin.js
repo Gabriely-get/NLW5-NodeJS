@@ -1,5 +1,6 @@
 const socket = io();
 let connectionsUsers = [];
+let userSocket = null;
 
 socket.on("admin_list_all_users", (connections) => {
 	console.log(connections);
@@ -22,7 +23,8 @@ socket.on("admin_list_all_users", (connections) => {
 function call(id) {
 	//carrega chat para suporte
 	const connection = connectionsUsers.find(connection => connection.socket_id === id);
-
+	userSocket = connection.socket_id;
+	console.log('userSocket: ', userSocket);
 	const template = document.getElementById("admin_template").innerHTML;
 
 	const rendered = Mustache.render(template, {
@@ -69,10 +71,12 @@ function call(id) {
 
 function sendMessage(id) {
 	const text = document.getElementById(`send_message_${id}`);
+	const socket_id = userSocket;
 
 	const params = {
 		text: text.value,
-		user_id: id
+		user_id: id,
+		socket_id
 	};
 
 	socket.emit("admin_send_message", params);
@@ -91,14 +95,15 @@ function sendMessage(id) {
 }
 
 socket.on("admin_receive_message", async data => {
-	const connection = await connectionsUsers.find(connection => connection.socket_id == data.socket_id);
-	console.log(connection, data.socket_id);
-	const divMessages = document.getElementById(`allMessages${connection.user_id}`);
+	// console.log(data);
+	const conne = await connectionsUsers.findOne(connection => connection.socket_id === data.socket_id);
+	console.log(conne, data.socket_id);
+	const divMessages = document.getElementById(`allMessages${data.message.user_id}`);
 	const createDiv = document.createElement("div");
 
 	createDiv.className = "admin_message_client";
 
-	createDiv.innerHTML = `<span>${connection.user.email}</span>`;
+	createDiv.innerHTML = `<span>${conne.user.email}</span>`;
 	createDiv.innerHTML += `<span>${data.message.text}</span>`;
 	createDiv.innerHTML += `<span class="admin_date">${dayjs(data.message.created_at).format("DD/MM/YYYY HH:mm:ss")}</span>`;
 

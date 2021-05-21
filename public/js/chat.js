@@ -61,6 +61,9 @@ document.querySelector('#start_chat').addEventListener("click", (event) => {
 
   socket.on("admin_send_to_client", message => {
     socket_admin_id = message.socket_id;
+
+    console.log('admin mandou', message);
+
     var template_admin = document.getElementById("admin-template").innerHTML;
 
     const rendered = Mustache.render(template_admin, {
@@ -76,9 +79,9 @@ document.querySelector("#send_message_button").addEventListener("click", (event)
 
   const params = {
     text: text.value,
-    socket_admin_id
+    socket_admin_id,
   };
-console.log(params, socket.id);
+console.log('user manda: ', params, 'socketUser', socket.id);
   socket.emit("client_send_to_admin", params);
 
   var template_client = document.getElementById("message-user-template").innerHTML;
