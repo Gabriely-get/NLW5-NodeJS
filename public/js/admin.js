@@ -1,6 +1,7 @@
 const socket = io();
 let connectionsUsers = [];
 let userSocket = null;
+let userEmail = null;
 
 socket.on("admin_list_all_users", (connections) => {
 	console.log(connections);
@@ -24,6 +25,7 @@ function call(id) {
 	//carrega chat para suporte
 	const connection = connectionsUsers.find(connection => connection.socket_id === id);
 	userSocket = connection.socket_id;
+	userEmail = connection.user.email;
 	console.log('userSocket: ', userSocket);
 	const template = document.getElementById("admin_template").innerHTML;
 
@@ -96,14 +98,14 @@ function sendMessage(id) {
 
 socket.on("admin_receive_message", async data => {
 	// console.log(data);
-	const conne = await connectionsUsers.findOne(connection => connection.socket_id === data.socket_id);
-	console.log(conne, data.socket_id);
+	// const conne = await connectionsUsers.find(connection => connection.socket_id === data.socket_id);
+	// console.log(conne, data.socket_id);
 	const divMessages = document.getElementById(`allMessages${data.message.user_id}`);
 	const createDiv = document.createElement("div");
 
 	createDiv.className = "admin_message_client";
 
-	createDiv.innerHTML = `<span>${conne.user.email}</span>`;
+	createDiv.innerHTML = `<span>${userEmail}</span>`;
 	createDiv.innerHTML += `<span>${data.message.text}</span>`;
 	createDiv.innerHTML += `<span class="admin_date">${dayjs(data.message.created_at).format("DD/MM/YYYY HH:mm:ss")}</span>`;
 
