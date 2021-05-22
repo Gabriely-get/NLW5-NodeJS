@@ -113,6 +113,8 @@
     function openChat() {
       const chat_supp = document.getElementById("chat_in_support");
 
+      document.getElementById("txt_help").value = "";
+
       if(chat.style.display == "block" || chat_supp.style.display == "block") {
         null;
       } else {

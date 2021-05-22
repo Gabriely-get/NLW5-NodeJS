@@ -1,6 +1,7 @@
 let socket_admin_id = null;
 let emailUser = null;
 let socket = null;
+let textUser = null;
 
 document.querySelector('#start_chat').addEventListener("click", (event) => {
   socket = io();
@@ -15,7 +16,7 @@ document.querySelector('#start_chat').addEventListener("click", (event) => {
   emailUser = email;
 
   const text = document.getElementById("txt_help").value;
-
+  textUser = text;
   
   socket.on("connect", () => {
     const params = {
@@ -103,6 +104,7 @@ function closeChat() {
   if(chat_help.style.display == "block") {
 
     chat_help.style.display = "none";
+    
   } else if(chat_supp.style.display == "block") {
 
     chat_supp.style.display = "none";
