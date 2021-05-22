@@ -29,10 +29,6 @@ io.on("connect", async (socket) => {
 			admin_id: socket.id
 		});
 
-		// const { socket_id } = await connectionsService.findUserById(user_id);
-		console.log('socketUsernapagAd: ', socket_id);
-		console.log('socketAdmin: ', socket.id);
-		console.log('mensAd pag Ad: ', m);
 		// mando mensagem para o socket especifico do usuario emitindo um evento
 		io.to(socket_id).emit("admin_send_to_client", {
 			text,

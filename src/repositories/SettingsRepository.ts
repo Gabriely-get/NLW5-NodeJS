@@ -3,7 +3,7 @@ import { Setting } from "../entities/Setting";
 
 @EntityRepository(Setting)
 class SettingsRepository extends Repository<Setting> {
-	// console.log('respository');
+	
 }
 
 export { SettingsRepository };

@@ -4,7 +4,7 @@ let userSocket = null;
 let userEmail = null;
 
 socket.on("admin_list_all_users", (connections) => {
-	console.log(connections);
+	
 	connectionsUsers = connections;
 	document.getElementById("list_users").innerHTML = "";
 
@@ -26,7 +26,7 @@ function call(id) {
 	const connection = connectionsUsers.find(connection => connection.socket_id === id);
 	userSocket = connection.socket_id;
 	userEmail = connection.user.email;
-	console.log('userSocket: ', userSocket);
+
 	const template = document.getElementById("admin_template").innerHTML;
 
 	const rendered = Mustache.render(template, {
@@ -97,9 +97,6 @@ function sendMessage(id) {
 }
 
 socket.on("admin_receive_message", async data => {
-	// console.log(data);
-	// const conne = await connectionsUsers.find(connection => connection.socket_id === data.socket_id);
-	// console.log(conne, data.socket_id);
 	const divMessages = document.getElementById(`allMessages${data.message.user_id}`);
 	const createDiv = document.createElement("div");
 
