@@ -28,13 +28,12 @@ class ConnectionsService {
 	}
 
 	async updateSocketId(socket_id: string, userid: string) {
-		let an = await this.connectionsRepository
-				.createQueryBuilder()
-				.update(Connection)
-				.set({ socket_id })
-				.where({ user_id: userid })
-				.execute();
-				return an;
+		await this.connectionsRepository
+			.createQueryBuilder()
+			.update(Connection)
+			.set({ socket_id })
+			.where({ user_id: userid })
+			.execute();
 	}
 
 	async updateAdminId({ user_id, socket_id }: IConnectionCreate) {
@@ -48,8 +47,7 @@ class ConnectionsService {
 
 	async findUserById(user_id: string) {
 		const connection = await this.connectionsRepository.findOne({user_id});
-		let a = await this.connectionsRepository.find();
-		console.log(a);
+	
 		return connection;
 	}
 
