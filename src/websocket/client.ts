@@ -36,15 +36,31 @@ io.on("connect", (socket) => {
 
 			if(!connection) {
 
-				let con = await connectionsService.create({
+				let a =await connectionsService.create({
 					socket_id: socketId,
 					user_id: userExists.id
 				});
-
+				console.log('criei conn ', a);
 			} else {
-				connection.socket_id = socketId;
+				//se o usuario ja se conectou e foi atendido em todas,
+				//uma nova conexao é criada, mas se houver uma conexao dele nao atendida
+				//o socket dele deve ser atualizado para nao ser duplicado na lista dos admins
 
-				await connectionsService.create(connection);
+				const userAdminIsNull = await connectionsService.findUserWithoutAdmin(user_id);
+				connection.socket_id = socket.id;
+				console.log('admin is null? ', userAdminIsNull);
+				
+				if(!userAdminIsNull) {
+
+					connection.admin_id = null;
+					let a = await connectionsService.create(connection);
+					console.log('ja foi atendido antes: criei: ', a);
+				} else {
+
+					let userid = connection.user_id;
+					let a = await connectionsService.updateSocketId(socketId, userid);
+					console.log('updSoc', a);
+				}
 			}
 		}
 
@@ -54,10 +70,32 @@ io.on("connect", (socket) => {
 		});
 
 		const allMessages = await messagesService.listByUser(user_id);
+		const allConnectionsWithoutAdmin = await connectionsService.findAllWithoutAdmin();
 
 		socket.emit("client_list_all_messages", allMessages);
 
+		//atualiza automaticamente a lista de usuario sem atendimento na pagina do admin
+		io.emit("admin_list_all_users", allConnectionsWithoutAdmin);
+
 		// Salvar a conexao do usuario com o socket_id &
-		// Salvar a mesma conexao desse mesmo user com socket_id diferente
+		// Salvar uma conexao existente com socket_id diferente
+	});
+
+	socket.on("client_send_to_admin", async (params) => {
+		const { text, socket_admin_id } = params;
+		const socket_id = socket.id;
+		const { user_id } = await connectionsService.findBySocketId(socket_id);
+
+		const message = await messagesService.create({
+			text,
+			user_id,
+		});
+
+		console.log('user-send-to: ', text, user_id, socket_id, socket_admin_id, message);
+
+		io.to(socket_admin_id).emit("admin_receive_message", {
+			message,
+			socket_id
+		});
 	});
 });
